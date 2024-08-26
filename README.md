@@ -1,35 +1,71 @@
-# front-file-manager
+# File Manager (Front-end)
 
-This template should help get you started developing with Vue 3 in Vite.
+![Image do app](https://private-user-images.githubusercontent.com/102697614/361577598-31e7751a-dd7c-4aa8-b097-00d9ef446558.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjQ3MDY4MzUsIm5iZiI6MTcyNDcwNjUzNSwicGF0aCI6Ii8xMDI2OTc2MTQvMzYxNTc3NTk4LTMxZTc3NTFhLWRkN2MtNGFhOC1iMDk3LTAwZDllZjQ0NjU1OC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwODI2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDgyNlQyMTA4NTVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01MDc2NmRmODdkOWVjMmE1YTJjMjhhNDU3Mzc1NWFmYjE1ODA4YTBhZWZhNmQ1NDk3ZjY3NDA5Y2MyYTBhMjlhJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.ZxGRWr53C553b-6UpVFH2xoIuj4g4k_gEUtVVNV26b4)
 
-## Recommended IDE Setup
+## Back End
+Esta aplicação é o front-end da API disponível no repositório [front-end-file-manager](https://github.com/evertonreiss/front-file-manager), acesse o link e siga os passo para a instalação para utilizar os recursos.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Pré-requisitos
 
-## Customize configuration
+Ferramentas necessárias para iniciar o projeto:
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- [Git](https://git-scm.com/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-## Project Setup
+## Instruções de Instalação da Api
 
-```sh
-npm install
+Siga os passos abaixo para configurar e iniciar a aplicação:
+
+### 1. Clone o Repositório
+
+No terminal, execute o comando abaixo para clonar o repositório:
+
+```bash
+git clone https://github.com/evertonreiss/front-file-manager
 ```
 
-### Compile and Hot-Reload for Development
+### 2. Entre na Pasta do Projeto
 
-```sh
-npm run dev
+Navegue até o diretório do projeto:
+
+```bash
+cd file-manager
 ```
 
-### Compile and Minify for Production
+### 3. Fazer Build do Contêiner
 
-```sh
-npm run build
+Execute o seguinte comando para buildar a imagem
+
+```bash
+docker build -t front-end-file-manager .
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### 4. Iniciar Aplicação
 
-```sh
-npm run lint
+Execute o comando para iniciar o contêiner da aplicação em segundo plano na porta 8080:
+
+```bash
+docker run -d -p 8080:80 --name front-end-file-manager front-end-file-manager-image
 ```
+
+### 6. Comandos Úteis
+
+- Iniciar aplicação:
+
+  ```bash
+  docker run -d -p 8080:80 front-end-file-manager
+  ```
+
+- Parar aplicação:
+
+  ```bash
+  docker stop front-end-file-manager
+  ```
+
+## Uso
+Para utilizar a aplicação, acesse: `localhost:8080`
+
+
+## Contribuições
+Fique a vontade para contribuir ou reportar problemas!
