@@ -1,9 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useAuthStore } from '@/utils/authStore';
 import downloadFile from '@/utils/downloadFile';
 import { api } from '@/utils/api';
-import { baseURL } from '@/utils/api';
 
 const props = defineProps({
     uploadedBy: {
@@ -24,22 +23,28 @@ const props = defineProps({
     }
 });
 
-const authStore = useAuthStore()
-const authUserId = authStore.getUser() ? authStore.getUser().id : null
+const emit = defineEmits(['remove'])
 
-const isFileOwner = authUserId === props.uploadedBy
+const authStore = useAuthStore()
+
+const isFileOwner = computed(() => authStore.getAuth()?.user?.id === props.uploadedBy && authStore.isAuthenticated())
 
 async function requestDownloadFile() {
     const response = await api.get('/arquivos/download/' + props.fileId, { responseType: 'blob' })
     downloadFile(response.data, props.fileName)
 }
 
-const opcoes = [
+async function requestDeleteFile() {
+    const response = await api.delete('/arquivos/' + props.fileId)
+    emit('remove')
+}
+
+const opcoes = ref([
     { title: 'Ver', icon: 'mdi-arrow-expand-all', active: true },
     { title: 'Editar', icon: 'mdi-pencil', active: isFileOwner },
-    { title: 'Excluir', icon: 'mdi-delete', active: isFileOwner },
+    { title: 'Excluir', icon: 'mdi-delete', active: isFileOwner, onClick: requestDeleteFile },
     { title: 'Download', icon: 'mdi-download', active: props.isDownloadable, onClick: requestDownloadFile }
-]
+])
 
 </script>
 <template>
@@ -49,15 +54,17 @@ const opcoes = [
         </template>
 
         <v-list style="background-color: #405060;">
-            <v-list-item v-for="item in opcoes.filter(e => e.active)" :key="item.id">
-                <v-list-item-title style="color: aliceblue;">
-                    <v-btn @click="item.onClick" class="text-none" color="transparent" :prepend-icon="item.icon"
-                        variant="flat">
-                        {{ item.title }}
-                    </v-btn>
-                </v-list-item-title>
+            <template v-for="item in opcoes" :key="item.id">
+                <v-list-item v-if="item.active">
+                    <v-list-item-title style="color: aliceblue;">
+                        <v-btn @click="item.onClick" class="text-none" color="transparent" :prepend-icon="item.icon"
+                            variant="flat">
+                            {{ item.title }}
+                        </v-btn>
+                    </v-list-item-title>
 
-            </v-list-item>
+                </v-list-item>
+            </template>
         </v-list>
     </v-menu>
 </template>

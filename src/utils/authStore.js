@@ -40,6 +40,9 @@ export function useAuthStore() {
         },
         getUser() {
             return auth.user
+        },
+        getAuth() {
+            return auth
         }
     }
 }
