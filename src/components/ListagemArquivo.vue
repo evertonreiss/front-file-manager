@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import ArquivoOpcoes from './ArquivoOpcoes.vue';
 import { api } from '@/utils/api';
 import humanFileSize from '@/utils/humanFileSize';
+import { getFileType, getIconForFile } from '@/utils/fileUtils';
 
 const files = ref([])
 
@@ -18,11 +19,11 @@ defineExpose({ listarArquivos })
 </script>
 <template>
     <v-card v-if="files.length" class="mx-auto pa-6" max-width="90vw" color="#303540">
-        <v-list-item v-for="file in files" :key="file.id" :title="file.file_name">
+        <v-list-item v-for="file in files" :key="file.id" :title="file.file_name + '.' + getFileType(file.file_path)">
             <template v-slot:prepend>
-                <v-avatar color="#506070">
-                    <v-icon color="white">mdi-image</v-icon>
-                </v-avatar>
+                <v-icon size="x-large" color="#fff">{{ getIconForFile(getFileType(file.file_path)) }}</v-icon>
+                <!-- <v-avatar color="#506070" tile>
+                </v-avatar> -->
             </template>
             <template v-slot:extends></template>
             <v-row justify="space-around" no-gutters>
