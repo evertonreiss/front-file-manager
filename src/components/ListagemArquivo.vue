@@ -37,8 +37,9 @@ defineExpose({ listarArquivos })
                 </v-col>
             </v-row>
             <template v-slot:append>
-                <ArquivoOpcoes @remove="listarArquivos" :uploaded-by="file.user.id"
-                    :is-downloadable="file.is_downloadable" :file-id="file.id" :file-name="file.file_name">
+                <ArquivoOpcoes @remove="listarArquivos" @edit="listarArquivos" :uploaded-by="file.user.id"
+                    :is-downloadable="file.is_downloadable" :file-id="file.id" :file-name="file.file_name"
+                    :mime-type="file.mime_type">
                 </ArquivoOpcoes>
             </template>
         </v-list-item>

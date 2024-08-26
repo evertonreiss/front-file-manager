@@ -1,8 +1,11 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useAuthStore } from '@/utils/authStore';
-import downloadFile from '@/utils/downloadFile';
+import { downloadFile, viewFile } from '@/utils/fileUtils';
 import { api } from '@/utils/api';
+import ArquivoEditar from './ArquivoEditar.vue';
+
+const modalEditar = ref(false)
 
 const props = defineProps({
     uploadedBy: {
@@ -17,21 +20,32 @@ const props = defineProps({
         type: Number,
         required: true
     },
+    mimeType: {
+        type: String,
+        required: true
+    },
     fileName: {
         type: String,
         required: true
     }
 });
 
-const emit = defineEmits(['remove'])
+const emit = defineEmits(['remove', 'edit'])
 
 const authStore = useAuthStore()
 
 const isFileOwner = computed(() => authStore.getAuth()?.user?.id === props.uploadedBy && authStore.isAuthenticated())
 
+const isFileDownloadable = computed(() => isFileOwner || props.isDownloadable)
+
 async function requestDownloadFile() {
     const response = await api.get('/arquivos/download/' + props.fileId, { responseType: 'blob' })
-    downloadFile(response.data, props.fileName)
+    downloadFile(response.data, props.fileName, props.mimeType)
+}
+
+async function requestViewFile() {
+    const response = await api.get('/arquivos/download/' + props.fileId, { responseType: 'blob' })
+    viewFile(response.data, props.mimeType)
 }
 
 async function requestDeleteFile() {
@@ -40,14 +54,15 @@ async function requestDeleteFile() {
 }
 
 const opcoes = ref([
-    { title: 'Ver', icon: 'mdi-arrow-expand-all', active: true },
-    { title: 'Editar', icon: 'mdi-pencil', active: isFileOwner },
+    { title: 'Ver', icon: 'mdi-arrow-expand-all', active: true, onClick: requestViewFile },
+    { title: 'Editar', icon: 'mdi-pencil', active: isFileOwner, onClick: () => modalEditar.value = true },
     { title: 'Excluir', icon: 'mdi-delete', active: isFileOwner, onClick: requestDeleteFile },
-    { title: 'Download', icon: 'mdi-download', active: props.isDownloadable, onClick: requestDownloadFile }
+    { title: 'Download', icon: 'mdi-download', active: isFileDownloadable, onClick: requestDownloadFile }
 ])
 
 </script>
 <template>
+    <ArquivoEditar v-model="modalEditar" @edit="$emit('edit')" :file-id="props.fileId"></ArquivoEditar>
     <v-menu>
         <template v-slot:activator="{ props }">
             <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props"></v-btn>
