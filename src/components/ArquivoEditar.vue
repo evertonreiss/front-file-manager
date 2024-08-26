@@ -38,7 +38,7 @@ watch(model, async () => {
 <template>
     <v-dialog v-model="model" max-width="500">
         <template v-slot:default="{ isActive }">
-            <v-card prepend-icon="mdi-cloud-upload" color="#354050" title="Enviar arquivo">
+            <v-card prepend-icon="mdi-pencil" color="#354050" title="Editar Arquivo">
                 <v-card-text>
                     <v-alert v-if="error" class="mb-4" color="error" :text="error"></v-alert>
                     <v-row dense>
