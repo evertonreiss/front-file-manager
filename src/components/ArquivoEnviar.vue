@@ -9,6 +9,7 @@ const arquivoForm = ref({
 const emit = defineEmits(['upload'])
 
 const dialog = ref(false)
+const error = ref()
 
 async function enviarArquivo() {
     try {
@@ -23,8 +24,8 @@ async function enviarArquivo() {
                 is_downloadable: '1'
             }
         }
-    } catch (error) {
-        console.log(error)
+    } catch (e) {
+        error.value = Object.values(e.response.data.errors).flat().join('\n')
     }
 }
 
@@ -40,6 +41,7 @@ async function enviarArquivo() {
         <template v-slot:default="{ isActive }">
             <v-card prepend-icon="mdi-cloud-upload" color="#354050" title="Enviar arquivo">
                 <v-card-text>
+                    <v-alert v-if="error" class="mb-4" color="error" :text="error"></v-alert>
                     <v-row dense>
                         <v-col cols="12" md="12" sm="6">
                             <v-file-input v-model="arquivoForm.uploaded_file" prepend-icon="" label="Arquivo"

@@ -3,16 +3,16 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/utils/authStore';
 
 const dialog = ref(false);
-const email = ref('everton@email.com');
-const password = ref('password');
+const email = ref();
+const password = ref();
 const authStore = useAuthStore();
+const error = ref()
 
 async function login() {
     try {
-        await authStore.login(email.value, password.value);
-        dialog.value = false;
-    } catch (error) {
-        console.error(error);
+        const response = await authStore.login(email.value, password.value);
+    } catch (e) {
+        error.value = Object.values(e.response.data.errors).flat().join('\n')
     }
 }
 </script>
@@ -26,11 +26,12 @@ async function login() {
 
             <v-card prepend-icon="mdi-account" title="Fazer login" color="#303540">
                 <v-card-text>
-                    <!-- Adicione o formulário -->
                     <form @submit.prevent="login">
+                        <v-alert v-if="error" class="mb-4" color="error" :text="error"></v-alert>
                         <v-row dense>
                             <v-col cols="12" md="12" sm="6">
-                                <v-text-field v-model="email" label="Email" required variant="outlined"></v-text-field>
+                                <v-text-field v-model="email" label="Email" type="email" required
+                                    variant="outlined"></v-text-field>
                             </v-col>
 
                             <v-col cols="12" md="12" sm="6">
@@ -45,7 +46,7 @@ async function login() {
                             <v-spacer></v-spacer>
 
                             <v-btn @click="dialog = false" class=" text-none text-white" color="#50505070" rounded="2"
-                                variant="flat" text="Cancelar" type="submit"></v-btn>
+                                variant="flat" text="Cancelar"></v-btn>
                             <v-btn class="text-none ms-2 text-white" color="#1e4f3e" rounded="2" variant="flat"
                                 text="Login" type="submit"></v-btn>
                         </v-card-actions>

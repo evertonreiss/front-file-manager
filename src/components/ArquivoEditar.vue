@@ -9,9 +9,8 @@ const props = defineProps({
     },
 });
 
-const arquivoForm = ref({
-
-})
+const arquivoForm = ref({})
+const error = ref()
 
 const emit = defineEmits(['edit'])
 const model = defineModel()
@@ -23,8 +22,8 @@ async function editarArquivo() {
         if (response) {
             model.value = false
         }
-    } catch (error) {
-        console.log(error)
+    } catch (e) {
+        error.value = Object.values(e.response.data.errors).flat().join('\n')
     }
 }
 
@@ -41,10 +40,10 @@ watch(model, async () => {
         <template v-slot:default="{ isActive }">
             <v-card prepend-icon="mdi-cloud-upload" color="#354050" title="Enviar arquivo">
                 <v-card-text>
+                    <v-alert v-if="error" class="mb-4" color="error" :text="error"></v-alert>
                     <v-row dense>
                         <v-col cols="12" md="12" sm="6">
-
-                            <v-text-field v-model="arquivoForm.file_name" label="Arquivo"
+                            <v-text-field v-model="arquivoForm.file_name" label="Nome do arquivo"
                                 variant="outlined"></v-text-field>
                         </v-col>
 

@@ -6,9 +6,10 @@ import { useAuthStore } from '@/utils/authStore';
 const authStore = useAuthStore();
 const dialog = ref(false);
 
-const name = ref('Everton');
-const email = ref('everton@email.com');
-const password = ref('password');
+const name = ref();
+const email = ref();
+const password = ref();
+const error = ref()
 
 async function cadastrar() {
     const data = {
@@ -22,8 +23,8 @@ async function cadastrar() {
             authStore.login(email.value, password.value);
             dialog.value = false;
         }
-    } catch (error) {
-        console.error(error);
+    } catch (e) {
+        error.value = Object.values(e.response.data.errors).flat().join('\n')
     }
 }
 </script>
@@ -37,8 +38,8 @@ async function cadastrar() {
 
             <v-card prepend-icon="mdi-account" color="#303540" title="Cadastrar-se">
                 <v-card-text>
-                    <!-- Adicione o formulário -->
                     <form @submit.prevent="cadastrar">
+                        <v-alert v-if="error" class="mb-4" color="error" :text="error"></v-alert>
                         <v-row dense>
                             <v-col cols="12" md="12" sm="6">
                                 <v-text-field v-model="name" label="Nome" required variant="outlined"></v-text-field>
@@ -61,7 +62,7 @@ async function cadastrar() {
                             <v-spacer></v-spacer>
 
                             <v-btn @click="dialog = false" class=" text-none text-white" color="#50505070" rounded="2"
-                                variant="flat" text="Cancelar" type="submit"></v-btn>
+                                variant="flat" text="Cancelar"></v-btn>
                             <v-btn class="text-none ms-2 text-white" color="#1e4f3e" rounded="2" variant="flat"
                                 text="Cadastrar" type="submit"></v-btn>
                         </v-card-actions>
