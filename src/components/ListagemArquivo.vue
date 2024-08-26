@@ -19,7 +19,8 @@ defineExpose({ listarArquivos })
 </script>
 <template>
     <v-card v-if="files.length" class="mx-auto pa-6" max-width="90vw" color="#303540">
-        <v-list-item v-for="file in files" :key="file.id" :title="file.file_name + '.' + getFileType(file.file_path)">
+        <v-list-item v-for="file in files" :key="file.id" :title="file.file_name + '.' + getFileType(file.file_path)"
+            style="margin: 10px 0; background-color: #363c44;">
             <template v-slot:prepend>
                 <v-icon size="x-large" color="#fff">{{ getIconForFile(getFileType(file.file_path)) }}</v-icon>
                 <!-- <v-avatar color="#506070" tile>
@@ -30,11 +31,14 @@ defineExpose({ listarArquivos })
                 <v-col cols="1">
                     <span>{{ humanFileSize(file.file_size, true) }}</span>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="2">
                     <span><b>Enviado por:</b> {{ file.user.name }}</span>
                 </v-col>
                 <v-col cols="8">
                     <span>{{ file.description ?? '' }}</span>
+                </v-col>
+                <v-col cols="1">
+                    <span style="color: #fff" v-if="!file.is_visible">Privado</span>
                 </v-col>
             </v-row>
             <template v-slot:append>

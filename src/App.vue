@@ -31,13 +31,18 @@ const listagemArquivoRef = ref()
                 </template>
             </v-app-bar>
 
-            <v-main style="min-height: 100vh; background-color: #333; color: aliceblue;">
-                <v-card-text>
+            <v-main style="min-height: 100vh; background-color: #333; color: aliceblue; padding: 100px 20px;">
+                <v-card-text v-if="authStore.isAuthenticated()">
                     <div class="d-flex justify-center my-10">
-                        <ArquivoEnviar @upload="listagemArquivoRef.listarArquivos()"></ArquivoEnviar>
+                        <ArquivoEnviar @upload="listagemArquivoRef.listarArquivos()">
+                        </ArquivoEnviar>
                     </div>
                     <ListagemArquivo ref="listagemArquivoRef"></ListagemArquivo>
                 </v-card-text>
+                <v-card v-else class="mx-auto elevation-4" max-width="415" color="#304050"
+                    title="Faça login para acessar e enviar arquivos">
+                </v-card>
+
             </v-main>
         </v-layout>
     </v-card>
