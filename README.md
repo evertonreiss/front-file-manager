@@ -38,7 +38,7 @@ cd file-manager
 Execute o seguinte comando para buildar a imagem
 
 ```bash
-docker build -t front-end-file-manager .
+docker build -t front-end-file-manager-image .
 ```
 
 ### 4. Iniciar Aplicação
